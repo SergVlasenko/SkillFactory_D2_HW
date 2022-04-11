@@ -1,0 +1,54 @@
+from news.models import *
+
+#1.Создаём пользователей
+U1 = User.objects.create_user('User 1')
+U2 = User.objects.create_user('User 2')
+
+#2.Создаём авторов и привязываем к User
+Author1 = Author.objects.create(authorUser=U1)
+Author2 = Author.objects.create(authorUser=U2)
+
+#3.Добавляем категории
+Category.objects.create(name = 'Политика')
+Category.objects.create(name = 'Экономика')
+Category.objects.create(name = 'Культура')
+Category.objects.create(name = 'Спорт')
+
+#4.Добавляем посты(статьи/новости)
+Post.objects.create(author=Author1, title='Статья 1', postType='AR', text='Текст статьи № 1')
+Post.objects.create(author=Author2, title='Статья 2', postType='AR', text='Текст статьи № 2')
+Post.objects.create(author=Author1, title='Новость 1', postType='NW', text='Текст новости № 1')
+
+#5.Присваиваем категории добавленным постам
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=2))
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=3))
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4))
+
+#6.Добавляем комментарии к постам
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=2).authorUser, text='Текст комментария 1')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=2).authorUser, text='Текст комментария 2')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=1).authorUser, text='Текст комментария 3')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=2).authorUser, text='Текст комментария 4')
+
+#7.Применяем функции like() и dislike() к постам и комментариям
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).dislike()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=3).like()
+
+#8.Обновляем рейтинги авторов
+Author1.update_rating()
+Author2.update_rating()
+
+#9.Выводим информацию о лучшем авторе
+Author.objects.order_by('-ratingAuthor').values('authorUser', 'ratingAuthor')[0]
+
+#10.Выводим информацию о самом лучшем посте
+bestPost = Post.objects.order_by('-rating')[0]
+print(bestPost.timeAdding, bestPost.title, bestPost.author.authorUser, bestPost.rating, bestPost.title, bestPost.preview())
+
+#11.Выводим все комментарии из лучшего поста
+Comment.objects.filter(commentPost=bestPost).values('timeAdding', 'commentUser', 'rating', 'text')
