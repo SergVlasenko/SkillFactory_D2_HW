@@ -4,22 +4,26 @@
 {% load custom_tags %}
 
 {% block title %}
-Все новости
+Поиск
 {% endblock title %}
 
 {% block content %}
-    <h3>Все новости</h3>
+    <h3>Поиск:</h3>
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+        <input type="submit" value="Найти" />
+    </form>
     <hr>
-    Всего новостей: {{all_news|length}}
+    Всего найдено: {{found_news|length}}
     <hr>
-    {% if all_news %}
+    {% if found_news %}
         <table>
             <tr>
                 <td>Заголовок</td>
                 <td>Дата публикации</td>
                 <td>Текст</td>
             </tr>
-            {% for post in all_news %}
+            {% for post in found_news %}
             <tr>
                 <td>{{post.title}}</td>
                 <td>{{post.timeAdding|date:'d/m/Y'}}</td>
