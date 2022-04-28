@@ -1,0 +1,14 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h2>Редактирование профиля пользователя {{ request.user.username }}</h2>
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if is_not_author %}
+    <button><a href="upgrade/">Стать автором</a></button>
+    {% endif %}
+    <input type="submit" value="Сохранить" />
+</form>
+{% endblock content %}
