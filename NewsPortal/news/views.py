@@ -44,10 +44,11 @@ class PostDetail(DetailView):
 
 
 # представление для создания поста/НОВОСТИ
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
     form_class = NewsForm
     model = Post
     template_name = 'news_edit.html'
+    permission_required = ('news.add_post',)
 
     def form_valid(self, form):
         news_post = form.save(commit=False)
@@ -56,10 +57,11 @@ class NewsCreate(CreateView):
 
 
 # представление для редактирования поста/НОВОСТИ
-class NewsUpdate(UpdateView):
+class NewsUpdate(PermissionRequiredMixin, UpdateView):
     form_class = NewsForm
     model = Post
     template_name = 'news_edit.html'
+    permission_required = ('news.change_post',)
 
 
 # представление для удаления поста/НОВОСТИ
@@ -74,8 +76,7 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
     form_class = NewsForm
     model = Post
     template_name = 'news_edit.html'
-    permission_required = ('news.add_post',
-                           'news.change_post',)
+    permission_required = ('news.add_post',)
 
     def form_valid(self, form):
         news_post = form.save(commit=False)
@@ -88,6 +89,7 @@ class ArticleUpdate(PermissionRequiredMixin, UpdateView):
     form_class = NewsForm
     model = Post
     template_name = 'news_edit.html'
+    permission_required = ('news.change_post',)
 
 
 # представление для удаления поста/СТАТЬИ
