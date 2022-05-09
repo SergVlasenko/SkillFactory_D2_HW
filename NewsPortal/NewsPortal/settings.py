@@ -158,7 +158,7 @@ ACCOUNT_FORMS = {'signup': 'news.forms.CommonSignUpForm'}
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'yachtoteka'
-EMAIL_HOST_PASSWORD = 'tajnxnfqcufbfwup'
+EMAIL_HOST_PASSWORD = 'abtajnxnfqcufbfwupcd'
 EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = '79607725595@yandex.ru'
