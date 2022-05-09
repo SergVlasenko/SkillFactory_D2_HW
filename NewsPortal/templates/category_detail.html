@@ -1,0 +1,34 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %} {{ category.name }} {% endblock title %}
+
+{% block header %}
+    <table width="100%">
+        <tr>
+            <td>
+                <h2>{{ category.name }}</h2>
+            </td>
+            <td align="right">
+                {% if category.subscribers|subscribed:user %}
+                    <button> <a href="{% url 'unsubscribe' cat_id=category.id %}">Отписаться</a> </button>
+                {% else %}
+                    <button> <a href="{% url 'subscribe' cat_id=category.id %}">Подписаться</a> </button>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endblock header %}
+
+{% block content %}
+    {% for link in all_links|by_category:category.id %}
+        <li>
+            <a href="{% url 'post_detail' link.postLink.id %}">{{ link.postLink.title|censor }}</a>
+        </li>
+    {% endfor %}
+{% endblock content %}
+
+{% block footer %}
+    <a href="{% url 'news_list' %}">К списку новостей</a>
+{% endblock footer %}

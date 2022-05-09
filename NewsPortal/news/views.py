@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import PostFilter
-from .models import Post
+from .models import Post, Category, PostCategory
 from .forms import NewsForm, UserForm
 
 
@@ -141,3 +141,28 @@ def upgrade_me(request):
     if not request.user.groups.filter(name='authors').exists():
         authors_group.user_set.add(user)
     return redirect('/user')
+
+
+# Представление для получения деталей категории
+class CategoryDetailView(DetailView):
+    template_name = 'category_detail.html'
+    queryset = Category.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_links'] = PostCategory.objects.all()
+        return context
+
+
+# Функция-представление для подписки на категорию
+@login_required
+def subscribe_me(request, cat_id):
+    Category.objects.get(pk=cat_id).subscribers.add(request.user)
+    return redirect(f'/categories/{cat_id}/')
+
+
+# Функция-представление для отписки от категории
+@login_required
+def unsubscribe_me(request, cat_id):
+    Category.objects.get(pk=cat_id).subscribers.remove(request.user)
+    return redirect(f'/categories/{cat_id}/')
