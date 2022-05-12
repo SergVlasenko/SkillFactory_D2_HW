@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 
@@ -30,7 +30,7 @@ def notify_new_post(sender, instance, **kwargs):
         msg = EmailMultiAlternatives(
             subject=f'Новый пост: {instance.title}',
             body=instance.text,
-            from_email='79607725595@yandex.ru',
+            from_email='test@yandex.ru',
             to=[e_mail],
         )
 

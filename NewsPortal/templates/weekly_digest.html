@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Недельная подборка новостей</title>
+</head>
+
+<body>
+  <h1>Недельная подборка новостей</h1>
+  {%for category in category_object%}
+  <p>В категории <strong>"{{category}}"</strong></p>
+  <p>есть новые посты</p>
+  {% for post in post_object %}
+  {% for post_cat in post.postCategory.all %}
+  {% if post_cat == category%}
+  <a href="http://127.0.0.1:8000{{ post.get_absolute_url }}">
+    <h2>
+      {{post.title}}
+    </h2>
+  </a>
+  <p>{{post.email_preview}}</p>
+  {%endif%}
+  {%endfor%}
+  {%endfor%}
+  {%endfor%}
+</body>
+
+</html>
