@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # наша задача
 def my_job():
-    notify_subscribers_weekly()
+    #notify_subscribers_weekly()
     #print('hello from job')
 
 

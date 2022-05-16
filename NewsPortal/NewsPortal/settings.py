@@ -157,11 +157,11 @@ ACCOUNT_FORMS = {'signup': 'news.forms.CommonSignUpForm'}
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'test'
-EMAIL_HOST_PASSWORD = '******************'
+EMAIL_HOST_USER = 'xxxxxx'
+EMAIL_HOST_PASSWORD = 'xxxxxx'
 EMAIL_USE_SSL = True
 
-DEFAULT_FROM_EMAIL = 'test@yandex.ru'
+DEFAULT_FROM_EMAIL = 'xxxxxx@yandex.ru'
 
 # Format string for displaying run time timestamps in the Django admin site. The default
 # just adds seconds to the standard Django format, which is useful for displaying the timestamps
@@ -178,3 +178,13 @@ APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 # that supports multiple background worker processes instead (e.g. Dramatiq, Celery, Django-RQ,
 # etc. See: https://djangopackages.org/grids/g/workers-queues-tasks/ for popular options).
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+#Настройки для Celery
+#CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://:I7vbvxSw7C2W3O5t7ZdcWgpqEn8g2M9H@redis-11961.c53.west-us.azure.cloud.redislabs.com:11961'
+#CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://:I7vbvxSw7C2W3O5t7ZdcWgpqEn8g2M9H@redis-11961.c53.west-us.azure.cloud.redislabs.com:11961'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACKS_LATE = True

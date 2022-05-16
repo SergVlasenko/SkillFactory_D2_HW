@@ -2,6 +2,7 @@ from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from .models import Post
 from datetime import timedelta, date
+from celery import shared_task
 
 # получаем список с адресами для рассылки
 def get_subscribers(category):
@@ -26,6 +27,7 @@ def send_emails(post_object, *args, **kwargs):
 
 
 # формирование еженедельной рассылки
+@shared_task
 def notify_subscribers_weekly():
     week = timedelta(days=7)
     posts = Post.objects.all()
@@ -69,3 +71,35 @@ def notify_subscribers_weekly():
             email_subject=email_subject,
             template=template,
             user_emails=[user_email, ])
+
+
+#отправка уведомлений подписчикам категории при добавлении нового поста (вызывается через signals)
+@shared_task
+def notify_new_post_with_celery(post_pk):
+    instance = Post.objects.get(pk=post_pk)
+    subscribers_list = []
+    # получаем категорИИ нового поста
+    categories_current_post = instance.postCategory.all()
+
+    # проходим все категории поста и всех подписчиков добавляем в список для отправки
+    for category in categories_current_post:
+        for user in category.subscribers.all():
+            subscribers_list.append(user)
+
+    # обработка отправки писем подписчикам в цикле для скрытия адреса получателя от других подписчиков
+    for i in subscribers_list:
+        user = i.username
+        e_mail = i.email
+
+        html_content = render_to_string('new_post_email.html',
+                                        {'post': instance, }
+                                        )
+        msg = EmailMultiAlternatives(
+            subject=f'Новый пост: {instance.title}',
+            body=instance.text,
+            from_email='test@yandex.ru',
+            to=[e_mail],
+        )
+
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
